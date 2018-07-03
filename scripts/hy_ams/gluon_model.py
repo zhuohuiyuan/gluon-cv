@@ -38,5 +38,8 @@ class Block2(gluon.nn.HybridBlock):
     def hybrid_forward(self, F, x):
         x=self.prelu1(self.conv1(x))
         return x+self.prelu2(self.conv2(x))
-    
+
+
+class spherenet(gluon.HybridBlock):
+    def __init__(self,class):
 
