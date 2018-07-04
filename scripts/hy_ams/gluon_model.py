@@ -58,7 +58,59 @@ class spherenet20(gluon.HybridBlock):
                                   Block2(channels=256),
                                   Block1(channels=512)
             )
-            self.fc5=gluon.nn.Dense(512)
+            self.net_sequence.add(gluon.nn.Dense(512))
     def hybrid_forward(self, F, x):
-        x=self.net_sequence(x)
-        return self.fc5(x)
+        return self.net_sequence(x)
+
+class Am_softmax(gluon.nn.HybridBlock):
+    def __init__(self,classes,feature,margin_s,margin_m):
+        super(Am_softmax, self).__init__()
+        self.classes=classes
+        self.feature=feature
+        self.s=margin_s
+        self.m=margin_m
+        self.norm6=gluon.nn.BatchNorm(epsilon=1e-10)
+
+    def hybrid_forward(self, F, x, weight, bias=None, **kwargs):
+        weight=F.L2Normalization(weight)
+        x=self.norm6(x)
+        x=F.FullyConnected(x,weight,bias,num_hidden=self.classes)
+        return x
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
